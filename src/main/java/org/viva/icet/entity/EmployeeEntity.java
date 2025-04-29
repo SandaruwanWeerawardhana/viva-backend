@@ -3,10 +3,12 @@ package org.viva.icet.entity;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.viva.icet.util.Department;
 
 import java.util.Date;
 
@@ -14,22 +16,26 @@ import java.util.Date;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
-@Table(name = "employee")
+@Table(name = "employee" ,uniqueConstraints = {
+@UniqueConstraint(columnNames = "email")
+})
 public class EmployeeEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @NotEmpty(message = "User ID should not be blank")
+    @NotEmpty(message = "Name is required")
     @Size(max = 100, message = "Username must 100 characters")
     private String name;
 
-    @NotEmpty(message = "User ID should not be blank")
+    @NotEmpty(message = "Email is required")
+    @Column(nullable = false, unique = true)
     @Email
     private String email;
 
-    @NotEmpty(message = "User ID should not be blank")
-    private String department;
+    @NotNull(message = "not be blank")
+    @Enumerated(EnumType.STRING)
+    private Department department;
 
     private Date createAt;
 

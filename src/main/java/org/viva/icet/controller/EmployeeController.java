@@ -9,7 +9,7 @@ import org.viva.icet.service.EmployeeService;
 import java.util.List;
 
 @RequiredArgsConstructor
-@RequestMapping("/api/details")
+@RequestMapping("/api")
 @RestController
 @CrossOrigin
 public class EmployeeController {
@@ -20,9 +20,9 @@ public class EmployeeController {
         return service.add(employee);
     }
 
-    @PutMapping("/update")
-    public void updateEmployee(@RequestBody Employee employee) {
-        service.update(employee);
+    @PutMapping("/employees/{id}")
+    public void updateEmployee(@RequestBody Employee employee, @PathVariable Long id) {
+        service.update(employee,id);
     }
 
     @DeleteMapping("/employees/{id}")

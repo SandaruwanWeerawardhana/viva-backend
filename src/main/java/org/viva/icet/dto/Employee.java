@@ -1,8 +1,8 @@
 package org.viva.icet.dto;
 
-import jakarta.persistence.Column;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -25,7 +25,7 @@ public class Employee {
     @Email
     private String email;
 
-    @NotEmpty(message = "User ID should not be blank")
+    @NotNull(message = "User ID should not be blank")
     private Department department;
 
     private Date createAt;

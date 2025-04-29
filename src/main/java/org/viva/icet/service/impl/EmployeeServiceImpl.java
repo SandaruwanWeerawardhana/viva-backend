@@ -1,5 +1,7 @@
 package org.viva.icet.service.impl;
 
+import jakarta.persistence.EntityNotFoundException;
+import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 import org.viva.icet.dto.Employee;
@@ -8,19 +10,24 @@ import org.viva.icet.repository.EmployeeRepository;
 import org.viva.icet.service.EmployeeService;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 @Service
+@RequiredArgsConstructor
 public class EmployeeServiceImpl implements EmployeeService {
-    private EmployeeRepository repository;
-    private ModelMapper mapper;
+    private final EmployeeRepository repository;
+    private final ModelMapper mapper;
 
     @Override
     public Boolean add(Employee employee) {
         if (repository.existsByEmail(employee.getEmail())) {
             return false;
-        }else {
-            repository.save(mapper.map(employee, EmployeeEntity.class));
+        } else {
+            EmployeeEntity entity = mapper.map(employee, EmployeeEntity.class);
+            entity.setCreateAt(new Date());
+            entity.setUpdateAt(new Date());
+            repository.save(entity);
             return true;
         }
     }
@@ -31,8 +38,17 @@ public class EmployeeServiceImpl implements EmployeeService {
     }
 
     @Override
-    public void update(Employee employee) {
-        repository.save(mapper.map(employee, EmployeeEntity.class));
+    public void update(Employee employee, Long id) {
+        EmployeeEntity existingEmployee = repository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("Employee with ID " + id + " not found."));
+
+        existingEmployee.setName(employee.getName());
+        existingEmployee.setEmail(employee.getEmail());
+        existingEmployee.setDepartment(employee.getDepartment());
+        existingEmployee.setUpdateAt(new Date());
+
+        repository.save(existingEmployee);
+
     }
 
     @Override
