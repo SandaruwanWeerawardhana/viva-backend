@@ -2,6 +2,7 @@ package org.viva.icet.controller;
 
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
 import org.viva.icet.dto.Employee;
 import org.viva.icet.service.EmployeeService;
@@ -12,11 +13,13 @@ import java.util.List;
 @RequestMapping("/api")
 @RestController
 @CrossOrigin
+@Slf4j
 public class EmployeeController {
     private final EmployeeService service;
 
     @PostMapping("/employees")
     public Boolean addEmployee(@RequestBody @Valid Employee employee) {
+        log.info(String.valueOf(employee));
         return service.add(employee);
     }
 
